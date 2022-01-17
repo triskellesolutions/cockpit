@@ -230,7 +230,9 @@ export function account_create_dialog(accounts) {
                         prog.push(state.real_name);
                     }
                     prog.push(state.user_name);
-                    prog.push(" && /usr/local/bin/mount-user-sftp-path.sh " + state.user_name );
+                    prog.push("&&");
+                    prog.push("/usr/local/bin/mount-user-sftp-path.sh");
+                    prog.push(state.user_name );
                     return cockpit.spawn(prog, { superuser: "require", err: "message" })
                             .then(() => passwd_change(state.user_name, state.password))
                             .then(() => {
