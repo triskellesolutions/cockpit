@@ -235,6 +235,7 @@ export function account_create_dialog(accounts) {
                     prog.push(state.user_name );
                     return cockpit.spawn(prog, { superuser: "require", err: "message" })
                             .then(() => passwd_change(state.user_name, state.password))
+                            .then(() => tss_config_sftp_user(state.user_name))
                             .then(() => {
                                 if (state.locked)
                                     return cockpit.spawn([
@@ -245,7 +246,27 @@ export function account_create_dialog(accounts) {
                             });
                 });
     }
-
+    //begin tss_config_sftp_user
+    function tss_config_sftp_user(user) {
+        return new Promise((resolve, reject) => {
+            cockpit.spawn(["/usr/local/bin/mount-user-sftp-path.sh"], { superuser: "require", err: "out" })
+                    .input(user)
+                    .done(function() {
+                        resolve();
+                    })
+                    .fail(function(ex, response) {
+                        if (ex.exit_status) {
+                            console.log(ex);
+                            if (response)
+                                ex = new Error(response);
+                            else
+                                ex = new Error(_("Failed to run mount-user-sftp-path.sh"));
+                        }
+                        reject(ex);
+                    });
+        });
+    }
+    //end tss_config_sftp_user
     function update() {
         const props = {
             id: "accounts-create-dialog",
