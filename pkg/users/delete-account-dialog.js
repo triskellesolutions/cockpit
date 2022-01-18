@@ -61,9 +61,12 @@ export function delete_account_dialog(account) {
                     style: "danger",
                     clicked: () => {
                         const prog = ["/usr/local/bin/unmount-user-sftp-path.sh", account.name];
+
                         return cockpit.spawn(prog, { superuser: "require", err: "message" })
-                                .then(tss_delete_user(account.name, state.delete_files))
-                                .then(function () {
+                                .then((data, message) => {
+                                    console.log({"data": data, "message": message});
+                                    return tss_delete_user(account.name, state.delete_files);
+                                }).then(function () {
                                     cockpit.location.go("/");
                                 });
                     }
@@ -79,7 +82,7 @@ export function delete_account_dialog(account) {
         }
     }
 
-    // begin tss_delete_user
+    // begin tss_config_sftp_user
     function tss_delete_user(name, delete_files) {
         return new Promise((resolve, reject) => {
             const prog = ["/usr/sbin/userdel"];
@@ -104,7 +107,7 @@ export function delete_account_dialog(account) {
                     });
         });
     }
-    // end tss_delete_user
+    // end tss_config_sftp_user
 
     update();
 }
