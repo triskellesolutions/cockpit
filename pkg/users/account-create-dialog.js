@@ -243,7 +243,7 @@ export function account_create_dialog(accounts) {
                             });
                 });
     }
-    //begin tss_config_sftp_user
+    // begin tss_config_sftp_user
     function tss_config_sftp_user(user) {
         return new Promise((resolve, reject) => {
             cockpit.spawn(["/usr/local/bin/mount-user-sftp-path.sh"], { superuser: "require", err: "out" })
@@ -263,7 +263,7 @@ export function account_create_dialog(accounts) {
                     });
         });
     }
-    //end tss_config_sftp_user
+    // end tss_config_sftp_user
     function update() {
         const props = {
             id: "accounts-create-dialog",
