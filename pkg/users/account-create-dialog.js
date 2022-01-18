@@ -224,7 +224,7 @@ export function account_create_dialog(accounts) {
                             shell = item.split("=")[1] || "";
                         }
                     });
-                    const prog = ["/usr/sbin/useradd", "--create-home", "-s", shell || "/bin/bash"];
+                    const prog = ["/usr/sbin/useradd", "--create-home", "-s", shell || "/bin/bash", "-g", "sftpusers"];
                     if (state.real_name) {
                         prog.push('-c');
                         prog.push(state.real_name);
@@ -248,7 +248,6 @@ export function account_create_dialog(accounts) {
         return new Promise((resolve, reject) => {
             const prog = ["/usr/local/bin/mount-user-sftp-path.sh", user];
             cockpit.spawn(prog, { superuser: "require", err: "message" })
-                    .input(user)
                     .done(function() {
                         resolve();
                     })

@@ -60,12 +60,9 @@ export function delete_account_dialog(account) {
                     caption: _("Delete"),
                     style: "danger",
                     clicked: () => {
-                        const prog = ["/usr/sbin/userdel"];
-                        if (state.delete_files)
-                            prog.push("-r");
-                        prog.push(account.name);
-
+                        const prog = ["/usr/local/bin/unmount-user-sftp-path.sh", account.name];
                         return cockpit.spawn(prog, { superuser: "require", err: "message" })
+                                .then(tss_delete_user(account.name, state.delete_files))
                                 .then(function () {
                                     cockpit.location.go("/");
                                 });
@@ -81,6 +78,33 @@ export function delete_account_dialog(account) {
             dlg.setFooterProps(footer);
         }
     }
+
+    // begin tss_delete_user
+    function tss_delete_user(name, delete_files) {
+        return new Promise((resolve, reject) => {
+            const prog = ["/usr/sbin/userdel"];
+            if (delete_files) {
+                prog.push("-r");
+            }
+            prog.push(name);
+
+            cockpit.spawn(prog, { superuser: "require", err: "message" })
+                    .done(function() {
+                        resolve();
+                    })
+                    .fail(function(ex, response) {
+                        if (ex.exit_status) {
+                            console.log(ex);
+                            if (response)
+                                ex = new Error(response);
+                            else
+                                ex = new Error(_("Failed to run /usr/sbin/userdel"));
+                        }
+                        reject(ex);
+                    });
+        });
+    }
+    // end tss_delete_user
 
     update();
 }
