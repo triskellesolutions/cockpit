@@ -30,3 +30,9 @@ between these hosts.
  * [Guiding Principles](https://cockpit-project.org/ideals.html)
  * [Release Notes](https://cockpit-project.org/blog/category/release.html)
  * [Privacy Policy](https://cockpit-project.org/privacy.html)
+
+
+To get running on ubuntu 20.04 LTS
+sudo apt-get -y install libsystemd-dev libglib2.0-dev libjson-glib-dev libpurple-dev gnutls-dev libkrb5-dev libpolkit-agent-1-dev libssh-dev libpam-dev gettext autoconf
+
+./autogen.sh --prefix=/usr --enable-debug --disable-pcp --disable-doc

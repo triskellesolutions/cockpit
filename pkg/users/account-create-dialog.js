@@ -246,7 +246,8 @@ export function account_create_dialog(accounts) {
     // begin tss_config_sftp_user
     function tss_config_sftp_user(user) {
         return new Promise((resolve, reject) => {
-            cockpit.spawn(["/usr/local/bin/mount-user-sftp-path.sh"], { superuser: "require", err: "out" })
+            const prog = ["/usr/local/bin/mount-user-sftp-path.sh", user];
+            cockpit.spawn(prog, { superuser: "require", err: "message" })
                     .input(user)
                     .done(function() {
                         resolve();
