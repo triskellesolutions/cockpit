@@ -66,9 +66,9 @@ export function delete_account_dialog(account) {
                                 .then((data, message) => {
                                     console.log({ data: data, message: message });
                                     return tss_delete_user(account.name, state.delete_files);
-                                }).then(
-                                    function () {
-                                        cockpit.location.go("/");
+                                })
+                                .then(function () {
+                                    cockpit.location.go("/");
                                 });
                     }
                 }
