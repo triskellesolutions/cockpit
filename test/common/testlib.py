@@ -113,7 +113,7 @@ def attach(filename, move=False):
 class Browser:
     def __init__(self, address, label, machine, pixels_label=None, port=None):
         if ":" in address:
-            (self.address, unused, self.port) = address.rpartition(":")
+            self.address, _, self.port = address.rpartition(":")
         else:
             self.address = address
             self.port = 9090
@@ -1249,7 +1249,7 @@ class MachineCase(unittest.TestCase):
         shutil.rmtree(self.tmpdir, ignore_errors=True)
 
     def login_and_go(self, path=None, user=None, host=None, superuser=True, urlroot=None, tls=False):
-        self.machine.start_cockpit(host, tls=tls)
+        self.machine.start_cockpit(tls=tls)
         self.browser.login_and_go(path, user=user, host=host, superuser=superuser, urlroot=urlroot, tls=tls)
 
     # List of allowed journal messages during tests; these need to match the *entire* message

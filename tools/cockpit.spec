@@ -161,7 +161,6 @@ Recommends: subscription-manager-cockpit
 %setup -q -n cockpit-%{version}
 
 %build
-exec 2>&1
 %configure \
     --disable-silent-rules \
     --with-cockpit-user=cockpit-ws \
@@ -174,10 +173,11 @@ exec 2>&1
     --disable-ssh \
 %endif
 
-make -j4 %{?extra_flags} all
+make -j$(nproc) %{?extra_flags} all
 
 %if 0%{?with_selinux}
     make -f /usr/share/selinux/devel/Makefile cockpit.pp
+    rm -f cockpit.pp.bz2
     bzip2 -9 cockpit.pp
 %endif
 
@@ -230,10 +230,10 @@ echo '%dir %{_datadir}/cockpit/ssh' >> base.list
 find %{buildroot}%{_datadir}/cockpit/ssh -type f >> base.list
 echo '%{_libexecdir}/cockpit-ssh' >> base.list
 
-echo '%dir %{_datadir}/cockpit/pcp' >> pcp.list
+echo '%dir %{_datadir}/cockpit/pcp' > pcp.list
 find %{buildroot}%{_datadir}/cockpit/pcp -type f >> pcp.list
 
-echo '%dir %{_datadir}/cockpit/tuned' >> system.list
+echo '%dir %{_datadir}/cockpit/tuned' > system.list
 find %{buildroot}%{_datadir}/cockpit/tuned -type f >> system.list
 
 echo '%dir %{_datadir}/cockpit/shell' >> system.list
@@ -248,7 +248,7 @@ find %{buildroot}%{_datadir}/cockpit/users -type f >> system.list
 echo '%dir %{_datadir}/cockpit/metrics' >> system.list
 find %{buildroot}%{_datadir}/cockpit/metrics -type f >> system.list
 
-echo '%dir %{_datadir}/cockpit/kdump' >> kdump.list
+echo '%dir %{_datadir}/cockpit/kdump' > kdump.list
 find %{buildroot}%{_datadir}/cockpit/kdump -type f >> kdump.list
 
 echo '%dir %{_datadir}/cockpit/sosreport' > sosreport.list
@@ -260,7 +260,7 @@ find %{buildroot}%{_datadir}/cockpit/storaged -type f >> storaged.list
 echo '%dir %{_datadir}/cockpit/networkmanager' > networkmanager.list
 find %{buildroot}%{_datadir}/cockpit/networkmanager -type f >> networkmanager.list
 
-echo '%dir %{_datadir}/cockpit/packagekit' >> packagekit.list
+echo '%dir %{_datadir}/cockpit/packagekit' > packagekit.list
 find %{buildroot}%{_datadir}/cockpit/packagekit -type f >> packagekit.list
 
 echo '%dir %{_datadir}/cockpit/apps' >> packagekit.list
@@ -534,8 +534,8 @@ fi
 # set up dynamic motd/issue symlinks on first-time install; don't bring them back on upgrades if admin removed them
 if [ "$1" = 1 ]; then
     mkdir -p /etc/motd.d /etc/issue.d
-    ln -s /run/cockpit/motd /etc/motd.d/cockpit
-    ln -s /run/cockpit/motd /etc/issue.d/cockpit.issue
+    ln -s ../../run/cockpit/motd /etc/motd.d/cockpit
+    ln -s ../../run/cockpit/motd /etc/issue.d/cockpit.issue
 fi
 
 %tmpfiles_create cockpit-tempfiles.conf

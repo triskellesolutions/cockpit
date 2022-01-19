@@ -17,8 +17,11 @@
 .deps/
 Makefile
 Makefile.in
+test-*.log
+test-*.trs
 
 # toplevel (/...)
+/*.list
 /.flatpak-builder
 /aclocal.m4
 /bots
@@ -33,19 +36,14 @@ Makefile.in
 /cockpit-tls
 /cockpit-ws
 /cockpit-wsinstance-factory
-/config.h
-/config.h.in
-/config.log
-/config.status
+/cockpit.lang
+/cockpit.pp.bz2
+/config.*
 /configure
 /dist/
 /frob-websocket
 /mock-*
 /org.cockpit_project.CockpitClient.*
-/tmp/
-/valgrind-suppressions
-/webpack-jumpstart.tar
-/wsinstance-start
 /package-lock.json
 /socket-activation-helper
 /stamp-h1
@@ -53,8 +51,12 @@ Makefile.in
 /test-*
 /test-*.log
 /test-*.trs
-/tmp-dist
 /test_rsa_key
+/tmp-dist
+/tmp/
+/valgrind-suppressions
+/webpack-jumpstart.tar
+/wsinstance-start
 
 # subdirs (/subdir/...)
 /doc/guide/version
