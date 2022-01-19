@@ -72,13 +72,11 @@ export function AccountsList({ accounts, current_user }) {
 
     return (
         <Page id="accounts">
-            { superuser.allowed &&
-                <PageSection variant={PageSectionVariants.light}>
-                    <Button id="accounts-create" onClick={() => account_create_dialog(accounts)}>
-                        {_("Create new account")}
-                    </Button>
-                </PageSection>
-            }
+            <PageSection variant={PageSectionVariants.light}>
+                <Button id="accounts-create" isDisabled={!superuser.allowed} onClick={() => account_create_dialog(accounts)}>
+                    {_("Create new account")}
+                </Button>
+            </PageSection>
             <PageSection id="accounts-list">
                 <Gallery className='ct-system-overview' hasGutter>
                     { filtered_accounts.map(a => <AccountItem key={a.name} account={a} current={current_user == a.name} />) }
